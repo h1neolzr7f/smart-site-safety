@@ -1,18 +1,18 @@
 # 智慧工地安全行为识别与预警系统
 
-施工现场安全监测原型。用 YOLO 检测未佩戴安全帽，用 YOLO Pose 识别危险俯身和疑似倒地，在 Streamlit 页面里完成实时预警、记录和导出。
+用 YOLO 看有没有戴安全帽，再用 Pose 看人是不是弯太狠、像不像摔倒。页面是 Streamlit，图片、文件夹、摄像头都能试。
 
-## 功能
+## 能做什么
 
-- 图片检测、文件夹批量检测、摄像头实时监测
-- 安全帽合规 / 未佩戴判定
-- 人体 17 关键点规则：危险俯身、疑似倒地
-- 预警截图、处理状态、CSV / Excel 导出
-- 检测模型与姿态模型上传切换
+- 单张图、整个文件夹、摄像头
+- 戴没戴帽
+- 17 个关键点判断俯身和疑似倒地
+- 预警截图，能改处理状态，能导出 CSV / Excel
+- 检测模型和姿态模型可以换
 
 ## 训练结果
 
-在 HelmetHead 数据集（约 1.06 万张训练图，两类：`head` / `helmet`）上训练后，末轮指标：
+HelmetHead 大约 1.06 万张训练图，两类：`head` / `helmet`。最后一轮：
 
 | 指标 | 数值 |
 | --- | --- |
@@ -21,7 +21,7 @@
 | mAP@50 | 0.885 |
 | mAP@50-95 | 0.604 |
 
-曲线和混淆矩阵在 `assets/train/`。本仓库只带测试样例，完整训练集未放入，避免体积过大。
+曲线和混淆矩阵在 `assets/train/`。仓库只带测试样例，整套训练集太大，没放进来。
 
 ## 运行
 
@@ -32,33 +32,29 @@ pip install -r requirements.txt
 .\run_app.ps1
 ```
 
-浏览器打开 `http://127.0.0.1:8502`。
+浏览器开 `http://127.0.0.1:8502`。
 
-默认读取：
+默认用这些路径：
 
-- `models/best.pt`：安全帽检测权重
-- `models/yolov26n-pose.pt`：人体姿态权重
-- `data/HelmetHead/test`：测试样例
-- `data/samples`：页面预览样例
+- `models/best.pt`：安全帽
+- `models/yolov26n-pose.pt`：姿态
+- `data/HelmetHead/test`：测试图
+- `data/samples`：页面预览
 
-首次安装 `torch` / `ultralytics` 可能较慢。没有 GPU 时自动走 CPU，实时帧率会下降。
+第一次装 `torch` / `ultralytics` 会比较慢。没 GPU 就走 CPU，实时帧率会掉。
 
 ## 重新训练
 
-把完整数据集按 `train/images`、`valid/images`、`test/images` 放到 `data/HelmetHead/`，确认 `safety_dataset.yaml` 后执行：
+把完整数据按 `train/images`、`valid/images`、`test/images` 放到 `data/HelmetHead/`，核对 `safety_dataset.yaml`，然后：
 
 ```powershell
 python train.py
 ```
 
-脚本会按是否有 CUDA 自动选择设备。
-
-## 技术栈
+有 CUDA 就用显卡，没有就用 CPU。
 
 Python、Ultralytics YOLO、OpenCV、Streamlit、Pandas
 
-## License
+MIT。公开页只写 GitHub 账号 [h1neolzr7f](https://github.com/h1neolzr7f)。
 
-MIT. Public attribution uses GitHub account [h1neolzr7f](https://github.com/h1neolzr7f) only.
-
-Portfolio index: [dev-portfolio](https://github.com/h1neolzr7f/dev-portfolio)
+总览：[dev-portfolio](https://github.com/h1neolzr7f/dev-portfolio)
