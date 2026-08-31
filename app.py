@@ -767,9 +767,11 @@ with param_col:
     st.number_input("XMAX", value=int(coords["xmax"]), disabled=True)
     st.number_input("YMAX", value=int(coords["ymax"]), disabled=True)
     st.divider()
-    st.markdown("### 当前路径")
-    st.markdown(f'<div class="path-box">{st.session_state.model_path}</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="path-box">{st.session_state.pose_model_path}</div>', unsafe_allow_html=True)
+    st.markdown("### 当前模型")
+    st.caption("安全帽检测")
+    st.code(Path(st.session_state.model_path).name, language=None)
+    st.caption("人体姿态")
+    st.code(Path(st.session_state.pose_model_path).name, language=None)
 
 
 if st.session_state.menu == "系统设置":
@@ -831,6 +833,7 @@ elif st.session_state.menu == "图片检测":
         sample_choice = st.selectbox(
             "或选择测试集样例",
             ["不使用样例"] + [str(path) for path in sample_paths],
+            format_func=lambda value: value if value == "不使用样例" else Path(value).name,
         )
 
         source_image = None
